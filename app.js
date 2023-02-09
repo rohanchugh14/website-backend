@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
@@ -39,8 +39,10 @@ app.get("/testing", (req, res) => {
 */
 app.post("/proxy", (req, res) => {
     // get the request query strings
+    console.log("\n\n\n\n\n\n");
+    console.log("Proxy url", req.url);
     const queryStrings = req.query;
-    if(queryStrings) {
+    if(Object.keys(queryStrings).length !== 0) {
         console.log("url:", req.body);
         console.log("Found query strings:\n", queryStrings)
         // add the query strings to the URL
@@ -64,6 +66,7 @@ app.post("/proxy", (req, res) => {
         res.send(response.data);
     }).catch((error) => {
         console.error(error);
+        res.status(400).send(error);
     });
    
 });
